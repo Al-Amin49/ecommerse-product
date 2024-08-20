@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { ProductServices } from "./product.service";
@@ -109,10 +110,30 @@ const deleteProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const searchProducts = async (req: Request, res: Response) => {
+    try {
+        const searchTerm = req.query.searchTerm as string;
+       
+        const products = await ProductServices.searchProducts(searchTerm);
+      
+        res.status(200).json({
+            success: true,
+            message: `Products matching search term '${searchTerm}' fetched successfully!`,
+            data: products,
+        });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err:any) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to search products',
+        });
+    }
+};
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   updateProduct,
   deleteProduct,
+  searchProducts
 };
